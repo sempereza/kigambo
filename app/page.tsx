@@ -1,62 +1,80 @@
+"use client"
+import { useRouter } from "next/navigation"
+
 export default function Home() {
+  const router = useRouter()
+
   return (
-    <div className="min-h-screen bg-[#fdf2f8] text-gray-900">
-      {/* NAV */}
-      <nav className="flex justify-between items-center p-4 max-w-7xl mx-auto bg-white rounded-full mt-4 shadow-sm px-8">
-        <h1 className="text-2xl font-black text-purple-800">💜 Kigambo</h1>
-        <div className="hidden md:flex gap-6 text-sm font-medium">
-          <span className="text-purple-700">Home</span><span>Features</span><span>How it Works</span><span>Safety</span>
+    <div className="min-h-screen bg-[#fff5f9] text-[#1a1a1a]">
+      {/* Header */}
+      <header className="p-4 flex justify-center">
+        <div className="w-full max-w-6xl bg-white rounded-full px-6 py-3 flex justify-between items-center shadow-sm border border-black/5">
+          <div className="flex items-center gap-2 font-bold text-[#8B5CF6]">
+            <span>💜</span> Kigambo
+          </div>
+          <nav className="hidden md:flex gap-6 text-[13px]">
+            <span className="text-[#8B5CF6] font-bold">Home</span>
+            <span>Features</span>
+            <span>How it Works</span>
+            <span>Safety</span>
+          </nav>
+          <div className="flex gap-2">
+            <button onClick={() => router.push('/login')} className="px-5 py-2 rounded-full border border-black text-[13px]">Log In</button>
+            <button onClick={() => router.push('/login')} className="px-5 py-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#FF4D6D] text-white text-[13px] font-bold">Join Now</button>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <button className="px-4 py-2 rounded-full border">Log In</button>
-          <button className="px-4 py-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 text-white">Join Now</button>
-        </div>
-      </nav>
+      </header>
 
-      {/* HERO */}
-      <section className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 p-8 mt-8">
-        <div>
-          <h2 className="text-5xl font-black leading-tight text-purple-950">Find Love. Share Stories. Build Connection.</h2>
-          <p className="mt-4 text-gray-600">Kigambo — meaning "love talk" • Made for Ugandans to connect meaningfully, chat, and build real relationships.</p>
-          <div className="mt-6 flex gap-3">
-            <button className="px-6 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold">Get Started — It's Free →</button>
-            <button className="px-6 py-3 rounded-full border bg-white">Download App</button>
-          </div>
-          <div className="mt-6 flex gap-4 text-xs">
-            <span>✅ Verified Profiles</span><span>🛡️ Secure & Private</span><span>📍 Made for Uganda</span>
-          </div>
-        </div>
-        <div className="bg-gradient-to-br from-pink-200 to-purple-300 rounded-[2rem] p-6 flex items-center justify-center">
-          <div className="bg-white rounded-2xl p-4 shadow-xl w-80">
-            <p className="font-bold">New Matches <span className="float-right bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs">98% Match</span></p>
-            <div className="mt-3 flex gap-3 items-center">
-              <div className="w-12 h-12 bg-pink-200 rounded-full"></div>
-              <div><p className="font-bold">Aisha, 24 • Kampala</p><p className="text-xs text-gray-500">Artist • Loves coffee, music</p></div>
+      {/* Hero */}
+      <section className="px-6 py-12 flex justify-center">
+        <div className="max-w-6xl w-full grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <h1 className="text-4xl md:text-[42px] font-black leading-tight text-[#2d0a4e]">
+              Find Love. Share Stories.<br/>Build Connection.
+            </h1>
+            <p className="mt-4 text-sm text-black/60 leading-relaxed">
+              Kigambo — meaning "love talk" • Made for Ugandans to connect meaningfully, chat, and build real relationships.
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button onClick={() => router.push('/login')} className="px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#FF4D6D] text-white text-sm font-bold">
+                Get Started — It's Free →
+              </button>
+              <button onClick={() => alert('Android app coming to Play Store soon!')} className="px-6 py-3 rounded-full border border-black text-sm bg-white">
+                Download App
+              </button>
             </div>
-            <div className="mt-3 flex justify-end gap-2"><button className="text-pink-500">♡</button></div>
+            <div className="mt-6 flex gap-4 text-[11px]">
+              <span>✅ Verified Profiles</span>
+              <span>🛡️ Secure & Private</span>
+              <span>📍 Made for Uganda</span>
+            </div>
+          </div>
+
+          <div className="h-[300px] rounded-[2rem] bg-gradient-to-br from-[#ffd6e8] to-[#c9a8ff] p-6 flex items-center justify-center">
+            <div className="bg-white rounded-2xl p-4 w-[280px] shadow-xl">
+              <div className="flex justify-between items-center">
+                <p className="text-sm font-bold">New Matches</p>
+                <span className="text-[9px] px-2 py-1 bg-[#f5f3ff] rounded-full text-[#8B5CF6]">98% Match</span>
+              </div>
+              <div className="flex gap-3 mt-3 items-center">
+                <div className="w-12 h-12 rounded-full bg-pink-200"></div>
+                <div>
+                  <p className="text-sm font-bold">Aisha, 24 • Kampala</p>
+                  <p className="text-[11px] text-black/50">Artist • Loves coffee, music</p>
+                </div>
+              </div>
+              <p className="text-right mt-2 text-pink-400">♡</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* DISCOVER */}
-      <section className="bg-white py-12">
-        <h3 className="text-3xl font-bold text-center">Discover People Near You</h3>
-        <p className="text-center text-gray-500">Browse, like, and connect with locals. Safe, fun, respectful.</p>
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-6 p-6 mt-6">
-          {[
-            {name:"Olivia, 25 • Kampala", bio:"Teacher • Travel • Reading", match:"92%"},
-            {name:"Joseph, 26 • Jinja", bio:"Entrepreneur • Foodie", match:"95%"},
-            {name:"Naledi, 23 • Mbarara", bio:"Designer • Art • Hiking", match:"90%"},
-            {name:"David, 27 • Kampala", bio:"Musician • Photographer", match:"94%"},
-          ].map(p=>(
-            <div key={p.name} className="border rounded-2xl p-4 flex gap-4">
-              <div className="w-16 h-16 bg-gray-200 rounded-xl"></div>
-              <div className="flex-1"><p className="font-bold">{p.name} <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">{p.match}</span></p><p className="text-xs text-gray-500">{p.bio}</p><div className="mt-2 flex gap-2"><button className="w-8 h-8 border rounded-full">✕</button><button className="w-8 h-8 bg-pink-100 text-pink-500 rounded-full">♡</button></div></div>
-            </div>
-          ))}
-        </div>
+      {/* Discover */}
+      <section className="bg-white py-12 text-center">
+        <h2 className="text-2xl font-bold">Discover People Near You</h2>
+        <p className="text-sm text-black/50 mt-1">Browse, like, and connect with locals. Safe, fun, respectful.</p>
+        <button onClick={() => router.push('/discover')} className="mt-6 px-6 py-3 rounded-full bg-black text-white text-sm">Start Swiping →</button>
       </section>
-      <footer className="bg-[#2d1b4e] text-white p-8 text-center text-sm mt-8">© 2026 Kigambo. Made with ♥ in Uganda. All rights reserved.</footer>
     </div>
   )
 }
