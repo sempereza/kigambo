@@ -2,87 +2,95 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
-const PROFILES = [
-  { id: 1, name: "Aisha", age: 24, city: "Kampala • 2km", bio: "Loves storytelling, coffee & meaningful connection.", tags: ["Romance", "Music", "Travel"], img: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600" },
-  { id: 2, name: "Grace", age: 26, city: "Entebbe • 5km", bio: "Doctor by day, poet by night. Looking for real vibes.", tags: ["Books", "Yoga", "Honest"], img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600" },
-  { id: 3, name: "Martha", age: 23, city: "Mukono • 8km", bio: "Makerere graduate. Let's build something real.", tags: ["Faith", "Family", "Dreams"], img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600" },
+const TOP_USERS = [
+  { name: "DailySpark", img: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200" },
+  { name: "Maya, 24", img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200", online: true },
+  { name: "Jordan, 27", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200" },
+  { name: "Elena, 25", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200" },
+  { name: "Lucas, 28", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200" },
 ]
 
-export default function Discover() {
-  const router = useRouter()
-  const [index, setIndex] = useState(0)
-  const [direction, setDirection] = useState<"left" | "right" | null>(null)
-  const profile = PROFILES[index % PROFILES.length]
+const PROFILE = {
+  name: "Amara", age: 26, distance: "3 miles away", location: "Williamsburg, NY",
+  bio: "Knowing the best hidden vinyl listening bars & late-night spicy tonkotsu ramen",
+  tags: ["Leo", "172 cm", "Cocktails", "Dog parent", "Film Photography", "Indie Rock", "Coffee"],
+  img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800",
+  match: "94% Match"
+}
 
-  const swipe = (dir: "left" | "right") => {
-    setDirection(dir)
-    setTimeout(() => {
-      setIndex(i => i + 1)
-      setDirection(null)
-      if (dir === "right") {
-        // You can save match to Firebase here
-        console.log("Liked", profile.name)
-      }
-    }, 300)
-  }
+export default function DiscoverPage() {
+  const router = useRouter()
+  const [liked, setLiked] = useState(false)
 
   return (
-    <div className="min-h-screen bg-[#0a0612] text-white flex justify-center">
-      <div className="w-full max-w-[390px] min-h-screen flex flex-col relative bg-[#0a0612]">
+    <div className="min-h-screen bg-[#0b0c10] text-white flex justify-center">
+      <div className="w-full max-w-[390px] min-h-screen bg-[#0b0c10] flex flex-col">
         
-        {/* Header */}
-        <header className="flex justify-between items-center p-6">
-          <h1 className="font-black tracking-[0.2em] text-sm">KIGAMBO</h1>
-          <div className="flex gap-2">
-            <button onClick={() => router.push('/matches')} className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">💬</button>
-            <button className="w-8 h-8 rounded-full bg-purple-600"></button>
-          </div>
-        </header>
+        {/* Top */}
+        <div className="px-4 pt-4 flex justify-between text-[10px] text-white/50">
+          <span>Brooklyn, NY • 5 mi</span>
+          <span className="w-7 h-7 rounded-full bg-white/10"></span>
+        </div>
 
-        {/* Card Stack */}
-        <div className="flex-1 px-4 pb-28 relative">
-          {/* Next card behind */}
-          <div className="absolute top-2 left-6 right-6 h-[520px] rounded-[2.5rem] bg-[#1a102e] scale-[0.95]"></div>
-          
-          {/* Main card */}
-          <div className={`relative h-[520px] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_20px_80px_rgba(139,92,246,0.3)] transition-all duration-300 ${direction === "left" ? "-translate-x-[150%] rotate-[-20deg]" : direction === "right" ? "translate-x-[150%] rotate-[20deg]" : ""}`}>
-            <img src={profile.img} className="absolute inset-0 w-full h-full object-cover" alt="" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+        {/* Stories Row */}
+        <div className="flex gap-3 px-4 mt-4 overflow-x-auto scrollbar-hide">
+          {TOP_USERS.map(u => (
+            <div key={u.name} className="flex flex-col items-center gap-1 min-w-[56px]">
+              <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-pink-500 to-orange-400">
+                <img src={u.img} className="w-full h-full rounded-full object-cover border-2 border-black" />
+              </div>
+              <span className="text-[9px] text-white/60">{u.name}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Main Card */}
+        <div className="px-3 mt-5">
+          <div className="relative h-[560px] rounded-[2rem] overflow-hidden bg-[#1a1a1a]">
+            <img src={PROFILE.img} className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
             
-            {/* Top pills */}
-            <div className="absolute top-4 left-4 right-4 flex gap-1">
-              <div className="h-1 flex-1 bg-white rounded-full"></div>
-              <div className="h-1 flex-1 bg-white/20 rounded-full"></div>
-              <div className="h-1 flex-1 bg-white/20 rounded-full"></div>
+            <div className="absolute top-3 left-3 flex gap-2">
+              <span className="px-2 py-1 rounded-full bg-black/50 text-[9px] backdrop-blur">● Active now</span>
+              <span className="px-2 py-1 rounded-full bg-[#FF4D6D] text-[9px] font-bold">{PROFILE.match}</span>
             </div>
 
-            {/* Info */}
-            <div className="absolute bottom-0 p-6 w-full">
-              <div className="flex items-end justify-between">
-                <div>
-                  <h2 className="text-3xl font-bold">{profile.name}, {profile.age}</h2>
-                  <p className="text-xs text-white/60 mt-1">{profile.city}</p>
-                </div>
-                <button className="w-8 h-8 rounded-full bg-white/20 backdrop-blur flex items-center justify-center">ⓘ</button>
+            <div className="absolute bottom-0 p-5 w-full">
+              <div className="flex items-center gap-2">
+                <h2 className="text-2xl font-bold">{PROFILE.name} {PROFILE.age}</h2>
+                <span className="w-5 h-5 rounded-full bg-[#FF4D6D] flex items-center justify-center text-[10px]">✓</span>
               </div>
-              <p className="mt-3 text-sm text-white/80 leading-relaxed">{profile.bio}</p>
-              <div className="mt-3 flex gap-2 flex-wrap">
-                {profile.tags.map(t => (
-                  <span key={t} className="px-3 py-1.5 rounded-full bg-white/10 backdrop-blur text-[10px] tracking-widest">{t.toUpperCase()}</span>
+              <p className="text-[10px] text-white/60 mt-1">📍 {PROFILE.distance} • {PROFILE.location}</p>
+              
+              <p className="mt-3 text-[11px] leading-relaxed text-white/80">
+                <span className="text-[9px] opacity-50">THE KEY TO MY HEART IS...</span><br/>
+                {PROFILE.bio} 🍜
+              </p>
+
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {PROFILE.tags.map(tag => (
+                  <span key={tag} className="px-2.5 py-1 rounded-full bg-white/10 backdrop-blur text-[9px] border border-white/10">{tag}</span>
                 ))}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-[#1a102e]/80 backdrop-blur-xl border border-white/10 rounded-full px-6 py-3">
-          <button onClick={() => swipe("left")} className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xl hover:bg-white/10">✕</button>
-          <button className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 flex items-center justify-center text-sm">★</button>
-          <button onClick={() => swipe("right")} className="w-14 h-14 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(168,85,247,0.6)]">♥</button>
+        {/* Action Buttons */}
+        <div className="flex justify-center gap-3 mt-4">
+          <button className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center">↺</button>
+          <button className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center">✕</button>
+          <button className="w-11 h-11 rounded-full bg-[#FFE400] text-black flex items-center justify-center">⚡</button>
+          <button onClick={() => setLiked(!liked)} className={`w-14 h-14 rounded-full flex items-center justify-center text-xl ${liked ? 'bg-[#FF4D6D]' : 'bg-[#FF4D6D]'} shadow-[0_0_20px_rgba(255,77,109,0.5)]`}>♥</button>
+          <button className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center">✦</button>
         </div>
 
-        <div className="text-center pb-4 text-[9px] text-white/20 tracking-widest">PRIVATE • SAFE • MADE FOR UGANDA</div>
+        {/* Bottom Nav */}
+        <div className="mt-auto flex justify-around py-4 border-t border-white/5 text-[9px]">
+          <button className="flex flex-col items-center gap-1 text-white/40"><span>◍</span>Sparks</button>
+          <button onClick={() => router.push('/matches')} className="flex flex-col items-center gap-1"><span>💬</span>Messages</button>
+          <button className="flex flex-col items-center gap-1 text-white/40"><span>👤</span>Profile</button>
+        </div>
       </div>
     </div>
   )
