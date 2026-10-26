@@ -1,14 +1,34 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { auth } from "@/lib/firebase"
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { ThemeToggle } from "../theme-toggle"
+import {
+  getRedirectResult,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+} from "firebase/auth"
 
 export default function Login() {
   const [loading, setLoading] = useState(false)
+  const [loginError, setLoginError] = useState("")
   const router = useRouter()
 
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) router.replace("/discover")
+      })
+      .catch((error) => {
+        console.error(error)
+        setLoginError("Google sign-in could not be completed. Please try again.")
+      })
+  }, [router])
+
   const handleGoogle = async () => {
+    setLoginError("")
     try {
       setLoading(true)
       const provider = new GoogleAuthProvider()
@@ -16,56 +36,91 @@ export default function Login() {
       router.push('/discover')
     } catch (err) {
       console.error(err)
-      alert("Login failed")
+      if (
+        err instanceof Error &&
+        "code" in err &&
+        err.code === "auth/popup-blocked"
+      ) {
+        try {
+          await signInWithRedirect(auth, new GoogleAuthProvider())
+          return
+        } catch (redirectError) {
+          console.error(redirectError)
+        }
+      }
+      setLoginError("Google sign-in failed. Please try again or explore as a guest.")
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0612] text-white flex justify-center p-4">
-      <div className="w-full max-w-[390px] min-h-screen bg-gradient-to-b from-[#1a1033] to-[#0a0612] rounded-[2.5rem] border border-white/10 overflow-hidden flex flex-col">
-        
-        {/* Top glow */}
-        <div className="h-24 bg-gradient-to-b from-purple-600/20 to-transparent relative">
-          <div className="absolute top-8 left-1/2 -translate-x-1/2 text-center">
-            <h1 className="font-black tracking-[0.3em] text-sm">KIGAMBO</h1>
-            <p className="text-[8px] tracking-[0.3em] text-white/30 mt-1">LUXURY DATING & INTIMACY</p>
-          </div>
+    <main className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)] lg:grid lg:grid-cols-2">
+      <div className="absolute right-6 top-6 z-20 lg:right-10 lg:top-9">
+        <ThemeToggle />
+      </div>
+      <section className="relative min-h-[280px] h-[38vh] overflow-hidden text-white lg:h-screen">
+        <div
+          className="absolute inset-0 bg-cover bg-[center_42%]"
+          style={{ backgroundImage: "url('/hero.jpg')" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#100b11] via-black/15 to-black/35 lg:bg-gradient-to-r lg:from-transparent lg:via-black/10 lg:to-[#100b11]" />
+        <Link href="/" className="absolute left-6 top-6 z-10 font-black tracking-[0.2em] text-sm lg:left-10 lg:top-9">
+          <span className="bg-gradient-to-r from-[#8B5CF6] to-[#FF4D6D] bg-clip-text text-transparent">KIGAMBO</span>
+        </Link>
+        <div className="absolute bottom-7 left-6 right-6 lg:bottom-14 lg:left-12 lg:right-12">
+          <p className="text-[10px] font-bold tracking-[0.22em] text-white/70">LUXURY DATING • UGANDA</p>
+          <p className="mt-3 max-w-md text-3xl font-black leading-tight sm:text-4xl">
+            Find your forever in Kampala.
+          </p>
         </div>
+      </section>
 
-        <div className="px-8 py-6 flex-1 flex flex-col">
-          <h2 className="text-2xl font-bold">Welcome back</h2>
-          <p className="text-xs text-white/40 mt-2 leading-relaxed">You deserve a meaningful connection in a private sanctuary</p>
-
-          <div className="mt-8 space-y-3">
-            <button onClick={handleGoogle} disabled={loading} className="w-full py-3.5 rounded-full bg-white text-black font-bold text-sm flex items-center justify-center gap-2">
-              <span className="text-lg">G</span> {loading ? "Please wait..." : "Continue with Google"}
-            </button>
-            <button onClick={() => router.push('/discover')} className="w-full py-3.5 rounded-full bg-white/5 border border-white/10 text-sm flex items-center justify-center gap-2">
-               Continue with Apple
-            </button>
-            <button className="w-full py-3.5 rounded-full bg-white/5 border border-white/10 text-sm flex items-center justify-center gap-2">
-              ✉ Continue with Email or Phone
-            </button>
-          </div>
-
-          <button onClick={() => router.push('/discover')} className="mt-6 text-center w-full text-xs text-purple-300">
-            Explore as Guest →
-          </button>
-
-          <p className="mt-4 text-[9px] text-center text-white/20 leading-relaxed">
-            By continuing, you agree and accept<br/>Kigambo's Terms & Privacy Policy
+      <section className="flex min-h-[62vh] items-center justify-center px-6 pb-8 pt-5 sm:px-10 lg:min-h-screen lg:px-12 lg:py-12">
+        <div className="w-full max-w-[400px]">
+          <p className="text-[10px] font-bold tracking-[0.22em] text-[#FF8290]">YOUR STORY STARTS HERE</p>
+          <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-4xl">Welcome back</h1>
+          <p className="mt-3 max-w-sm text-sm leading-relaxed text-[var(--muted)]">
+            A meaningful connection is closer than you think.
           </p>
 
-          <div className="mt-auto pt-6">
-            <div className="h-[140px] rounded-2xl bg-gradient-to-t from-purple-900/30 to-transparent border border-purple-500/10 flex items-end justify-center p-4 relative overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_rgba(168,85,247,0.4),_transparent_70%)]"></div>
-              <p className="text-[9px] text-white/30 relative">For Uganda, Designed with Love</p>
-            </div>
+          <div className="mt-8 space-y-3">
+            <button
+              onClick={handleGoogle}
+              disabled={loading}
+              className="flex w-full items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#FF4D6D] px-5 py-4 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
+            >
+              <span className="text-base font-black" aria-hidden="true">G</span>
+              {loading ? "Please wait..." : "Continue with Google"}
+            </button>
+            <button
+              onClick={() => router.push('/discover')}
+              className="flex w-full items-center justify-center gap-3 rounded-full border border-white/15 bg-white/[0.04] px-5 py-3.5 text-sm font-medium transition-colors hover:bg-white/10"
+            >
+              <span aria-hidden="true"></span> Continue with Apple
+            </button>
+            <button className="flex w-full items-center justify-center gap-3 rounded-full border border-white/15 bg-white/[0.04] px-5 py-3.5 text-sm font-medium transition-colors hover:bg-white/10">
+              <span aria-hidden="true">✉</span> Continue with Email or Phone
+            </button>
           </div>
+          {loginError && (
+            <p role="alert" className="mt-3 text-center text-xs text-[#FF8290]">
+              {loginError}
+            </p>
+          )}
+
+          <button
+            onClick={() => router.push('/discover')}
+            className="mt-6 w-full text-center text-sm font-semibold text-[#c7a8ff] transition-colors hover:text-white"
+          >
+            Explore as Guest <span aria-hidden="true">→</span>
+          </button>
+
+          <p className="mt-8 text-center text-[10px] leading-relaxed text-[var(--muted)]">
+            By continuing, you agree to Kigambo&apos;s Terms &amp; Privacy Policy.
+          </p>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   )
 }

@@ -1,8 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --background: #fffafb;
+  --foreground: #211a22;
+  --surface: #ffffff;
+  --surface-muted: #f5f2f5;
+  --muted: rgba(33, 26, 34, 0.58);
+  --border: rgba(33, 26, 34, 0.1);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #100b11;
+  --foreground: #f9f5fa;
+  --surface: #1c151e;
+  --surface-muted: #28212a;
+  --muted: rgba(249, 245, 250, 0.62);
+  --border: rgba(249, 245, 250, 0.14);
 }
 
 @theme inline {
@@ -12,15 +27,24 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.home-image-shade {
+  background-color: rgb(0 0 0 / 60%);
+}
+
+.home-image-gradient {
+  background-image: linear-gradient(to top, #000 0%, transparent 65%, rgb(0 0 0 / 30%) 100%);
+}
+
+:root[data-theme="light"] .home-image-shade {
+  background-color: rgb(255 250 251 / 72%);
+}
+
+:root[data-theme="light"] .home-image-gradient {
+  background-image: linear-gradient(to top, rgb(255 250 251 / 98%) 0%, rgb(255 250 251 / 12%) 58%, rgb(255 250 251 / 68%) 100%);
 }
