@@ -1,12 +1,8 @@
 "use client"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { matches } from "@/lib/matches"
 import { ThemeToggle } from "../theme-toggle"
-
-const matches = [
-  { id:1, name:"Kembabazi", age:22, city:"Mbarara", img:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200", last:"You: Hey 😉" },
-  { id:2, name:"Brenda", age:25, city:"Entebbe", img:"https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=200", last:"Seen • Wants to meet" },
-  { id:3, name:"Aisha", age:24, city:"Kampala", img:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200", last:"New Match! Say hi 💜" },
-]
 
 export default function Matches(){
   const router = useRouter()
@@ -23,10 +19,10 @@ export default function Matches(){
         <div className="mt-4 space-y-3">
           {matches.map(m=>(
             <div key={m.id} onClick={()=>router.push(`/chat/${m.id}`)} className="bg-[var(--surface)] p-4 rounded-[1.5rem] flex gap-4 items-center shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-[var(--border)] cursor-pointer hover:shadow-lg transition">
-              <img src={m.img} className="w-14 h-14 rounded-full object-cover" />
+              <Image src={m.image} alt={`${m.name}'s profile`} width={56} height={56} unoptimized className="w-14 h-14 rounded-full object-cover" />
               <div className="flex-1">
-                <p className="font-bold text-sm">{m.name}, {m.age} • {m.city}</p>
-                <p className="text-[12px] text-[var(--muted)]">{m.last}</p>
+                <p className="font-bold text-sm">{m.name}, {m.age} • {m.location}</p>
+                <p className="text-[12px] text-[var(--muted)]">{m.preview}</p>
               </div>
               <span className="text-[#8B5CF6]">→</span>
             </div>

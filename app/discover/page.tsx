@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ThemeToggle } from "../theme-toggle";
@@ -23,7 +24,7 @@ const users: User[] = [
     location: "Ntinda, 1.2km from Acacia Mall",
     tribe: "Muganda",
     bio: "Love Lake Victoria sunsets 🌅",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&auto=format&fit=crop",
+    image: "/Sarah.jpg",
   },
   {
     id: 2,
@@ -32,7 +33,7 @@ const users: User[] = [
     location: "Kololo, 0.5km away",
     tribe: "Munyankole",
     bio: "Makerere grad, loves Cafe Javas",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=900&auto=format&fit=crop",
+    image: "/moses.jpg",
   },
 ];
 
@@ -106,9 +107,11 @@ export default function Discover() {
 
         <section aria-label={`Profile for ${person.name}`} className="overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface)] shadow-[0_16px_50px_rgba(33,26,34,0.12)]">
           <div className="relative h-[min(62vh,520px)] min-h-[360px] bg-[var(--surface-muted)]">
-            <img
+            <Image
               src={person.image}
               alt={`${person.name}, ${person.age}`}
+              fill
+              sizes="(max-width: 480px) 100vw, 480px"
               className="h-full w-full object-cover"
             />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent px-5 pb-5 pt-20 text-white">
